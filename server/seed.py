@@ -30,14 +30,16 @@ with app.app_context():
     authors = [a1, a2, a3]
 
     print("Creating ResearchAuthors...")
-
-    ra1 = ResearchAuthors(author_id = a1, research_id = r1)
-    ra2 = ResearchAuthors(author_id = a2, research_id  = r2)
-    ra3 = ResearchAuthors(author_id = a3, research_id = r3)
-    ra4 = ResearchAuthors(author_id = a1, research_id = r3)
-    researchAuthor = [ra1, ra2, ra3, ra4]
     db.session.add_all(research_papers)
     db.session.add_all(authors)
+
+    ra1 = ResearchAuthors(author_backref = a1, research_backref = rc(research_papers))
+    ra2 = ResearchAuthors(author_backref = rc(authors), research_backref  =r1)
+    ra3 = ResearchAuthors(author_backref = rc(authors), research_backref = rc(research_papers))
+    ra4 = ResearchAuthors(author_backref = rc(authors), research_backref = rc(research_papers))
+    researchAuthor = [ra1, ra2, ra3, ra4]
+    # db.session.add_all(research_papers)
+    # db.session.add_all(authors)
     db.session.add_all(researchAuthor)
     db.session.commit()
 
